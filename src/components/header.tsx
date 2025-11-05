@@ -7,14 +7,13 @@ import { logoutServer } from "../actions";
 
 export const Header = () => {
   const router = useRouter();
-  const logOut = async () => {
 
+  const logOut = async () => {
     localStorage.removeItem("user");
     await logoutServer();
     router.push("/");
   };
 
-  
   return (
     <section className="flex  bg-slate-300 border-b p-5 border-slate-200 justify-between">
       <div className="flex items-center gap-2">
