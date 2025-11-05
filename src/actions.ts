@@ -1,7 +1,6 @@
 "use server";
 
 import axios from "axios";
-import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
 export async function register(body: {
@@ -21,15 +20,18 @@ export async function register(body: {
   }
 }
 
-
-
-
-export async function loginAction(formData: { email: string; password: string }) {
+export async function loginAction(formData: {
+  email: string;
+  password: string;
+}) {
   try {
-    const { data } = await axios.post("http://localhost:3000/api/auth/login", formData);
+    const { data } = await axios.post(
+      "http://localhost:3000/api/auth/login",
+      formData
+    );
 
     if (data.token) {
-      const cookieStore = await cookies()
+      const cookieStore = await cookies();
       cookieStore.set("token", data.token, {
         httpOnly: true,
         secure: false,
@@ -40,6 +42,15 @@ export async function loginAction(formData: { email: string; password: string })
 
     return { user: data.user };
   } catch (error: any) {
-    return { error: error.response?.data?.message || "Error al iniciar sesión" };
+    return {
+      error: error.response?.data?.message || "Error al iniciar sesión",
+    };
   }
+}
+
+export async function logoutServer() {
+  const cookieStore = await cookies();
+  cookieStore.delete("token");
+
+  return { ok: true };
 }

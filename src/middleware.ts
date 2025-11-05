@@ -10,20 +10,21 @@ export function middleware(req: NextRequest) {
 
   const isDashboardPage = pathname.startsWith("/dashboard");
 
-  // 1️⃣ Si estamos en login/register y ya hay token → redirigir a dashboard
+  if (pathname === "/" && token) {
+    return NextResponse.redirect(new URL("/dashboard", req.url));
+  }
+
   if (isAuthPage && token) {
     return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
-  // 2️⃣ Si estamos en dashboard y NO hay token → redirigir a /
   if (isDashboardPage && !token) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
-  // 3️⃣ Cualquier otra ruta → deja pasar
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login", "/register"],
+  matcher: ["/dashboard/:path*", "/login", "/register", "/"],
 };
