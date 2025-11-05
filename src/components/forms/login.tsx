@@ -1,0 +1,113 @@
+"use client";
+
+import React, { useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  Label,
+  Input,
+  Button,
+} from "@/src/components/ui";
+import { loginAction } from "@/src/actions";
+
+export const LoginForm = ({
+  setFormState,
+}: {
+  setFormState: React.Dispatch<React.SetStateAction<string>>;
+}) => {
+  const router = useRouter();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setError("");
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    if (!formData.email || !formData.password) {
+      return setError("Todos los campos son obligatorios");
+    }
+
+    try {
+      const response = await loginAction(formData)
+
+      if (response.user) {
+       
+        localStorage.setItem("user", JSON.stringify(response.user));
+      }
+      router.push("/dashboard");
+      return toast.success("¡Usuario registrado con éxito!");
+    } catch (err: any) {
+      console.error(err);
+      setError(err.response?.data?.error || "Error al iniciar sesión");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="flex flex-col gap-5">
+      <Card>
+        <CardHeader>
+          <CardDescription>
+            ¡Hola! Ingresa tu usuario y contraseña para iniciar sesión.
+          </CardDescription>
+        </CardHeader>
+
+        <form onSubmit={handleSubmit}>
+          <CardContent className="flex flex-col gap-5 items-center">
+            <div className="flex flex-col gap-2 w-full">
+              <Label>Email</Label>
+              <Input
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="tuemail@ejemplo.com"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2 w-full">
+              <Label>Contraseña</Label>
+              <Input
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="********"
+              />
+            </div>
+
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+          </CardContent>
+
+          <CardFooter className="flex justify-center pt-5">
+            <Button className="cursor-pointer" type="submit" disabled={loading}>
+              {loading ? "Cargando..." : "Iniciar sesión"}
+            </Button>
+          </CardFooter>
+        </form>
+      </Card>
+
+      <div className="flex justify-center">
+        <Button variant="link" onClick={() => setFormState("register")}>
+          Registrarme
+        </Button>
+      </div>
+    </div>
+  );
+};
