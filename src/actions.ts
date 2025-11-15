@@ -3,6 +3,22 @@
 import axios from "axios";
 import { cookies } from "next/headers";
 
+async function axiosWithAuth(
+  url: string,
+  method: "get" | "post" | "put" | "delete",
+  body?: any
+) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+
+  return axios({
+    url,
+    method,
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    data: body,
+  });
+}
+
 export async function register(body: {
   dni: string;
   email: string;
@@ -11,7 +27,7 @@ export async function register(body: {
   role: string;
 }) {
   try {
-    return await axios.post("http://localhost:3000/api/auth/register", body);
+    return await axios.post("https://plataforma-inscripciones.vercel.app/api/auth/register", body);
   } catch (error: any) {
     return {
       error: error.response?.data?.message || "Error al registrar al usuario",
@@ -25,7 +41,7 @@ export async function loginAction(formData: {
 }) {
   try {
     const { data } = await axios.post(
-      "http://localhost:3000/api/auth/login",
+      "https://plataforma-inscripciones.vercel.app/api/auth/login",
       formData
     );
 
@@ -61,7 +77,7 @@ export async function logoutServer() {
 
 export async function obtenerMaterias() {
   try {
-    const { data } = await axios.get(`http://localhost:3000/api/materias`);
+    const { data } = await axios.get(`https://plataforma-inscripciones.vercel.app/api/materias`);
 
     return data;
   } catch (error: any) {
@@ -73,7 +89,7 @@ export async function obtenerMaterias() {
 
 export async function obtenerProfesionales() {
   try {
-    const { data } = await axios.get(`http://localhost:3000/api/profesionales`);
+    const { data } = await axios.get(`https://plataforma-inscripciones.vercel.app/api/profesionales`);
 
     return data;
   } catch (error: any) {
@@ -88,52 +104,48 @@ export async function crearMateria(body: {
   descripcion: string;
 }) {
   try {
-    const { data } = await axios.post(
-      "http://localhost:3000/api/materias/",
+    const { data } = await axiosWithAuth(
+      "https://plataforma-inscripciones.vercel.app/api/materias",
+      "post",
       body
     );
     return data;
   } catch (error: any) {
-    return {
-      error: error.response?.data?.message || "Error al registrar al usuario",
-    };
+    return { error: error.response?.data?.message || "Error al crear materia" };
   }
 }
 
 export async function editarMateria({
-  body,
   id,
+  body,
 }: {
-  body: {
-    id_profesor: number;
-    descripcion: string;
-  };
   id: number;
+  body: { id_profesor: number; descripcion: string };
 }) {
   try {
-    const { data } = await axios.put(
-      `http://localhost:3000/api/materias/${id}`,
+    const { data } = await axiosWithAuth(
+      `https://plataforma-inscripciones.vercel.app/api/materias/${id}`,
+      "put",
       body
     );
     return data;
   } catch (error: any) {
     return {
-      error: error.response?.data?.message || "Error al registrar al usuario",
+      error: error.response?.data?.message || "Error al editar materia",
     };
   }
 }
 
 export async function eliminarMateria(id: number) {
   try {
-    console.log("AAA", id);
-    const { data } = await axios.delete(
-      `http://localhost:3000/api/materias/${id}`
+    const { data } = await axiosWithAuth(
+      `https://plataforma-inscripciones.vercel.app/api/materias/${id}`,
+      "delete"
     );
-    console.log("DATA", data);
     return data;
   } catch (error: any) {
     return {
-      error: error.response?.data?.message || "Error al registrar al usuario",
+      error: error.response?.data?.message || "Error al eliminar materia",
     };
   }
 }
