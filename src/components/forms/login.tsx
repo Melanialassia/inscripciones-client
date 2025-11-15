@@ -43,10 +43,15 @@ export const LoginForm = ({
     }
 
     try {
-      const response = await loginAction(formData)
+      const response = await loginAction(formData);
+      
+      if ("error" in response) {
+        return toast.warning("Ups! parece que ocurrio un error", {
+          description: response?.error,
+        });
+      }
 
       if (response.user) {
-       
         localStorage.setItem("user", JSON.stringify(response.user));
       }
       router.push("/dashboard");
@@ -104,7 +109,11 @@ export const LoginForm = ({
       </Card>
 
       <div className="flex justify-center">
-        <Button variant="link" onClick={() => setFormState("register")}>
+        <Button
+          type="button"
+          variant="link"
+          onClick={() => setFormState("register")}
+        >
           Registrarme
         </Button>
       </div>

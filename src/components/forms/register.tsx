@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { toast } from "sonner"
+import { toast } from "sonner";
 import {
   Card,
   CardContent,
@@ -34,7 +34,6 @@ export const RegisterForm = ({
   });
   const [errors, setErrors] = React.useState<{ [key: string]: string }>({});
   const [loading, setLoading] = React.useState(false);
-  const [globalError, setGlobalError] = React.useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -70,7 +69,13 @@ export const RegisterForm = ({
     }
 
     try {
-      await register(formData);
+      const response = await register(formData);
+
+      if ("error" in response) {
+        return toast.warning("Ups! parece que ocurrio un error", {
+          description: response?.error,
+        });
+      }
       setFormData({
         dni: "",
         email: "",
@@ -78,9 +83,9 @@ export const RegisterForm = ({
         confirmPassword: "",
         role: "alumno",
       });
-      return toast.success("¡Usuario registrado con éxito!")
-    } catch (error:any) {
-      return toast.success("¡Ups! hubo un error", error.message)
+      return toast.success("¡Usuario registrado con éxito!");
+    } catch (error: any) {
+      return toast.success("¡Ups! hubo un error", error.message);
     } finally {
       setLoading(false);
     }
@@ -157,9 +162,7 @@ export const RegisterForm = ({
             <Label>Seleccione su rol</Label>
             <Select value={formData.role} onValueChange={handleRoleChange}>
               <SelectTrigger className="w-full">
-                <SelectValue
-                  placeholder="Seleccionar rol"
-                />
+                <SelectValue placeholder="Seleccionar rol" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="admin">Administrador</SelectItem>
@@ -180,7 +183,11 @@ export const RegisterForm = ({
       </Card>
 
       <div className="flex justify-center">
-        <Button variant="link" onClick={() => setFormState("login")}>
+        <Button
+          type="button"
+          variant="link"
+          onClick={() => setFormState("login")}
+        >
           Iniciar sesión
         </Button>
       </div>
