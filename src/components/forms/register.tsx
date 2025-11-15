@@ -30,7 +30,7 @@ export const RegisterForm = ({
     email: "",
     password: "",
     confirmPassword: "",
-    role: "alumno",
+    rol: "alumno",
   });
   const [errors, setErrors] = React.useState<{ [key: string]: string }>({});
   const [loading, setLoading] = React.useState(false);
@@ -49,13 +49,13 @@ export const RegisterForm = ({
   };
 
   const handleRoleChange = (value: string) => {
-    const updatedData = { ...formData, role: value };
+    const updatedData = { ...formData, rol: value };
     setFormData(updatedData);
 
     const newErrors = validateRegisterForm(updatedData);
     setErrors((prev) => ({
       ...prev,
-      role: newErrors.role || "",
+      rol: newErrors.rol || "",
     }));
   };
 
@@ -81,7 +81,7 @@ export const RegisterForm = ({
         email: "",
         password: "",
         confirmPassword: "",
-        role: "alumno",
+        rol: "alumno",
       });
       return toast.success("¡Usuario registrado con éxito!");
     } catch (error: any) {
@@ -160,7 +160,7 @@ export const RegisterForm = ({
           </div>
           <div className="flex flex-col gap-2 justify-start w-full">
             <Label>Seleccione su rol</Label>
-            <Select value={formData.role} onValueChange={handleRoleChange}>
+            <Select value={formData.rol} onValueChange={handleRoleChange}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Seleccionar rol" />
               </SelectTrigger>
@@ -169,8 +169,8 @@ export const RegisterForm = ({
                 <SelectItem value="alumno">Alumno</SelectItem>
               </SelectContent>
             </Select>
-            {errors.role && (
-              <span className="text-red-500 text-sm">{errors.role}</span>
+            {errors.rol && (
+              <span className="text-red-500 text-sm">{errors.rol}</span>
             )}
           </div>
         </CardContent>

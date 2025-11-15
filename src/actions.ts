@@ -24,7 +24,7 @@ export async function register(body: {
   email: string;
   password: string;
   confirmPassword: string;
-  role: string;
+  rol: string;
 }) {
   try {
     return await axios.post("https://plataforma-inscripciones.vercel.app/api/auth/register", body);

@@ -3,10 +3,10 @@ export const validateRegisterForm = (formData: {
   email: string;
   password: string;
   confirmPassword: string;
-  role: string;
+  rol: string;
 }) => {
   const newErrors: { [key: string]: string } = {};
-  const { dni, email, password, confirmPassword, role } = formData;
+  const { dni, email, password, confirmPassword, rol } = formData;
 
   if (!dni.trim()) newErrors.dni = "El DNI es obligatorio";
   else if (dni.length < 6)
@@ -24,7 +24,7 @@ export const validateRegisterForm = (formData: {
   else if (password !== confirmPassword)
     newErrors.confirmPassword = "Las contraseñas no coinciden";
 
-  if (!role) newErrors.role = "Debes seleccionar un rol";
+  if (!rol) newErrors.rol = "Debes seleccionar un rol";
 
   return newErrors;
 };
