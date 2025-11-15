@@ -27,7 +27,7 @@ export async function register(body: {
   role: string;
 }) {
   try {
-    return await axios.post("https://plataforma-inscripciones.onrender.com/api/auth/register", body);
+    return await axios.post("https://plataforma-inscripciones.vercel.app/api/auth/register", body);
   } catch (error: any) {
     return {
       error: error.response?.data?.message || "Error al registrar al usuario",
@@ -41,7 +41,7 @@ export async function loginAction(formData: {
 }) {
   try {
     const { data } = await axios.post(
-      "https://plataforma-inscripciones.onrender.com/api/auth/login",
+      "https://plataforma-inscripciones.vercel.app/api/auth/login",
       formData
     );
 
@@ -77,7 +77,7 @@ export async function logoutServer() {
 
 export async function obtenerMaterias() {
   try {
-    const { data } = await axios.get(`https://plataforma-inscripciones.onrender.com/api/materias`);
+    const { data } = await axios.get(`https://plataforma-inscripciones.vercel.app/api/materias`);
 
     return data;
   } catch (error: any) {
@@ -89,7 +89,7 @@ export async function obtenerMaterias() {
 
 export async function obtenerProfesionales() {
   try {
-    const { data } = await axios.get(`https://plataforma-inscripciones.onrender.com/api/profesionales`);
+    const { data } = await axios.get(`https://plataforma-inscripciones.vercel.app/api/profesionales`);
 
     return data;
   } catch (error: any) {
@@ -105,7 +105,7 @@ export async function crearMateria(body: {
 }) {
   try {
     const { data } = await axiosWithAuth(
-      "https://plataforma-inscripciones.onrender.com/api/materias",
+      "https://plataforma-inscripciones.vercel.app/api/materias",
       "post",
       body
     );
@@ -124,7 +124,7 @@ export async function editarMateria({
 }) {
   try {
     const { data } = await axiosWithAuth(
-      `https://plataforma-inscripciones.onrender.com/api/materias/${id}`,
+      `https://plataforma-inscripciones.vercel.app/api/materias/${id}`,
       "put",
       body
     );
@@ -139,7 +139,7 @@ export async function editarMateria({
 export async function eliminarMateria(id: number) {
   try {
     const { data } = await axiosWithAuth(
-      `https://plataforma-inscripciones.onrender.com/api/materias/${id}`,
+      `https://plataforma-inscripciones.vercel.app/api/materias/${id}`,
       "delete"
     );
     return data;
