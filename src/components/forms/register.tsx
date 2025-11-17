@@ -83,7 +83,8 @@ export const RegisterForm = ({
         confirmPassword: "",
         rol: "alumno",
       });
-      return toast.success("¡Usuario registrado con éxito!");
+      toast.success("¡Usuario registrado con éxito!");
+      return setFormState("login");
     } catch (error: any) {
       return toast.success("¡Ups! hubo un error", error.message);
     } finally {
