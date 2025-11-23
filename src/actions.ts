@@ -28,7 +28,7 @@ export async function register(body: {
 }) {
   try {
     const { data } = await axiosWithAuth(
-      "http://localhost:3000/api/auth/register",
+      "https://plataforma-inscripciones.vercel.app/api/auth/register",
       "post",
       body
     );
