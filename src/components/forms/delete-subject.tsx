@@ -32,7 +32,7 @@ export const DeleteSubject = ({
     } | null
   ) => void;
   openDelete: boolean;
-}) => { console.log("id",item?.id)
+}) => { 
   const handleConfirmDelete = async () => {
     try {
      

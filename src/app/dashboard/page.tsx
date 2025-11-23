@@ -1,6 +1,6 @@
-import { ListSubjects } from "@/src/components";
+import { GeneralView } from "@/src/components";
 
 export default async function Dashboard() {
 
-  return <ListSubjects />
+  return <GeneralView />
 }

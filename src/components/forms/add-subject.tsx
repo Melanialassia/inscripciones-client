@@ -14,20 +14,14 @@ import {
 import { toast } from "sonner";
 import { crearMateria, editarMateria } from "@/src/actions";
 import { DialogClose, DialogFooter, DialogTitle } from "../ui/dialog";
+import { useAppStore } from "@/src/store";
 
 export const AddSubjectForm = ({
-  profesionales,
   onClose,
   refresh,
   item,
   setItem,
 }: {
-  profesionales: {
-    id_profesor: number;
-    dni: string;
-    nombre: string;
-    apellido: string;
-  }[];
   onClose: () => void;
   refresh: () => Promise<void>;
   item: {
@@ -43,6 +37,7 @@ export const AddSubjectForm = ({
     } | null
   ) => void;
 }) => {
+  const { profesionales } = useAppStore();
   const [loading, setLoading] = React.useState<boolean>(false);
   const [data, setData] = React.useState<{
     descripcion: string;
@@ -63,13 +58,11 @@ export const AddSubjectForm = ({
 
   React.useEffect(() => {
     if (item) {
-
       setData({ descripcion: item.descripcion, id_profesor: item.id_profesor });
     } else if (profesionales?.length > 0) {
-    
       setData((prev) => ({
         ...prev,
-        id_profesor: profesionales[0].id_profesor,
+        id_profesor: profesionales?.[0]?.id_profesor,
       }));
     }
   }, [item, profesionales]);
@@ -117,7 +110,16 @@ export const AddSubjectForm = ({
       <DialogTitle>Nueva materia</DialogTitle>
       <form className="flex flex-col gap-5 pt-5" onSubmit={onSubmit}>
         <div className="flex flex-col gap-2">
-          <Label>Seleccionar materia</Label>
+          <Label>Nombre de materia</Label>
+          <Input
+            name="descripcion"
+            value={data?.descripcion}
+            onChange={handleChange}
+            placeholder="Ingrese la materia"
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label>Seleccionar profesor</Label>
           <Select
             value={String(data?.id_profesor)}
             onValueChange={(value) =>
@@ -125,7 +127,7 @@ export const AddSubjectForm = ({
             }
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Seleccionar materia" />
+              <SelectValue placeholder="Seleccionar profesor" />
             </SelectTrigger>
             <SelectContent>
               {profesionales?.map(
@@ -145,15 +147,6 @@ export const AddSubjectForm = ({
               )}
             </SelectContent>
           </Select>
-        </div>
-        <div className="flex flex-col gap-2">
-          <Label>Nombre de materia</Label>
-          <Input
-            name="descripcion"
-            value={data?.descripcion}
-            onChange={handleChange}
-            placeholder="Ingrese la materia"
-          />
         </div>
         <DialogFooter className="pt-3 flex justify-end gap-3">
           <DialogClose asChild>
