@@ -19,7 +19,7 @@ interface UserModalFormProps {
 }
 
 export const StudentForm: React.FC<UserModalFormProps> = ({
-  mode = "register",
+  mode = "create",
   onClose,
   refresh,
 }) => {
@@ -50,13 +50,12 @@ export const StudentForm: React.FC<UserModalFormProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    
+
     const validationErrors = validateRegisterForm(formData);
 
     try {
       if (mode === "create") {
         if (Object.keys(validationErrors)?.length > 0) {
-
           setErrors(validationErrors);
           setLoading(false);
           return;
@@ -121,20 +120,21 @@ export const StudentForm: React.FC<UserModalFormProps> = ({
         {mode === "create" ? "Agregar alumno" : "Editar alumno"}
       </DialogTitle>
       <form className="flex flex-col gap-5 pt-5" onSubmit={handleSubmit}>
-        <div className="flex flex-col gap-2 w-full">
-          <Label htmlFor="dni">DNI</Label>
-          <Input
-            id="dni"
-            name="dni"
-            value={formData.dni}
-            onChange={handleChange}
-            placeholder="Ingrese DNI"
-          />
-          {errors.dni && (
-            <span className="text-red-500 text-sm">{errors.dni}</span>
-          )}
-        </div>
-
+        {mode === "create" && (
+          <div className="flex flex-col gap-2 w-full">
+            <Label htmlFor="dni">DNI</Label>
+            <Input
+              id="dni"
+              name="dni"
+              value={formData.dni}
+              onChange={handleChange}
+              placeholder="Ingrese DNI"
+            />
+            {errors.dni && (
+              <span className="text-red-500 text-sm">{errors.dni}</span>
+            )}
+          </div>
+        )}
         <div className="flex flex-col gap-2 w-full">
           <Label htmlFor="email">Email</Label>
           <Input
@@ -149,7 +149,6 @@ export const StudentForm: React.FC<UserModalFormProps> = ({
             <span className="text-red-500 text-sm">{errors.email}</span>
           )}
         </div>
-
         {mode === "create" && (
           <>
             <div className="flex flex-col gap-2 w-full">
@@ -184,7 +183,6 @@ export const StudentForm: React.FC<UserModalFormProps> = ({
             </div>
           </>
         )}
-
         <DialogFooter className="pt-3 flex justify-end gap-3">
           <DialogClose asChild>
             <Button
@@ -207,7 +205,7 @@ export const StudentForm: React.FC<UserModalFormProps> = ({
             </Button>
           </DialogClose>
           <Button disabled={loading} type="submit" className="cursor-pointer">
-            {mode === "register" ? "Registrarse" : "Guardar"}
+            {mode === "create" ? "Registrarse" : "Guardar"}
           </Button>
         </DialogFooter>
       </form>
