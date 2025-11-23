@@ -8,12 +8,12 @@ import { StudentsView } from "./students";
 import { Registration } from "./regristration";
 
 export const GeneralView = () => {
-  const [view, setView] = React.useState<string>("students");
+  const [view, setView] = React.useState<string>("subjects");
 
   return (
     <div className="p-5">
       <Tabs
-        defaultValue={view || "students-subject"}
+        defaultValue={view || "subjects"}
         value={view}
         onValueChange={setView}
       >
