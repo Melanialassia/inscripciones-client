@@ -4,12 +4,14 @@ import { FiBook } from "react-icons/fi";
 import { Button } from "./ui";
 import { useRouter } from "next/navigation";
 import { logoutServer } from "../actions";
+import { useAppStore } from "../store";
 
 export const Header = ({ children }: { children: React.ReactNode }) => {
+  const { clearStore } = useAppStore();
   const router = useRouter();
 
   const logOut = async () => {
-    localStorage.removeItem("user");
+    clearStore();
     await logoutServer();
     router.push("/");
   };

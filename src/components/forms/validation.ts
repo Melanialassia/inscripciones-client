@@ -8,7 +8,7 @@ export const validateRegisterForm = (formData: {
   const newErrors: { [key: string]: string } = {};
   const { dni, email, password, confirmPassword, rol } = formData;
 
-  if (!dni.trim()) newErrors.dni = "El DNI es obligatorio";
+  if (!dni?.trim()) newErrors.dni = "El DNI es obligatorio";
   else if (dni.length < 6)
     newErrors.dni = "El DNI debe tener al menos 6 caracteres";
 

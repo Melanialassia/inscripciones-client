@@ -28,10 +28,10 @@ export async function register(body: {
 }) {
   try {
     const { data } = await axios.post(
-      "https://plataforma-inscripciones.vercel.app/api/auth/register",
+      "http://localhost:3000/api/auth/register",
       body
     );
-    
+
     return data;
   } catch (error: any) {
     return {
@@ -155,6 +155,107 @@ export async function eliminarMateria(id: number) {
   } catch (error: any) {
     return {
       error: error.response?.data?.message || "Error al eliminar materia",
+    };
+  }
+}
+export async function obtenerAlumnos() {
+  try {
+    const {
+      data: { alumnos },
+    } = await axiosWithAuth("https://plataforma-inscripciones.vercel.app/api/alumno", "get");
+
+    return alumnos;
+  } catch (error: any) {
+    return {
+      error: error.response?.data?.message || "Error al eliminar materia",
+    };
+  }
+}
+
+export async function editeEmail(body: { dni: string; email: string }) {
+  try {
+    const { data } = await axiosWithAuth(
+      `https://plataforma-inscripciones.vercel.app/api/alumno/${body.dni}`,
+      "put",
+      body
+    );
+
+    return data;
+  } catch (error: any) {
+    return {
+      error:
+        error.response?.data?.message ||
+        "Error al registrar al editar el email",
+    };
+  }
+}
+
+export async function obtenerInscripcionAlumno(dni: string) {
+  try {
+    const DNI = Number(dni);
+    const {
+      data: { inscripciones },
+    } = await axiosWithAuth(
+      `https://plataforma-inscripciones.vercel.app/api/inscripciones/alumno/${DNI}`,
+      "get"
+    );
+
+    return inscripciones;
+  } catch (error: any) {
+    return {
+      error: error.response?.data?.message || "Error al crear incripcion",
+    };
+  }
+}
+
+export async function crearInscripcion(body: {
+  dni: string;
+  id_materia: number;
+  estado: string;
+  fecha_inscripcion: string;
+}) {
+  try {
+    const { data } = await axiosWithAuth(
+      "https://plataforma-inscripciones.vercel.app",
+      "post",
+      body
+    );
+    return data;
+  } catch (error: any) {
+    return {
+      error: error.response?.data?.message || "Error al crear inscripcion",
+    };
+  }
+}
+
+export async function editartEstadoInscripcion(body: {
+  id_inscripcion: number;
+  estado: string;
+}) {
+  try {
+    const { data } = await axiosWithAuth(
+      "https://plataforma-inscripciones.vercel.app/api/inscripciones/aprobar",
+      "post",
+      body
+    );
+    return data;
+  } catch (error: any) {
+    return {
+      error: error.response?.data?.message || "Error al actualizar el estado",
+    };
+  }
+}
+export async function eliminarInscripcion(id_inscripcion: number) {
+  try {
+    const { data } = await axiosWithAuth(
+      `https://plataforma-inscripciones.vercel.app/api/inscripciones/${id_inscripcion}`,
+      "delete"
+    );
+
+    return data;
+  } catch (error: any) {
+    return {
+      error: error.response?.data?.message || "Error al eliminar la incripcion",
     };
   }
 }

@@ -30,7 +30,7 @@ export const RegisterForm = ({
     email: "",
     password: "",
     confirmPassword: "",
-    rol: "alumno",
+    rol: "administrador",
   });
   const [errors, setErrors] = React.useState<{ [key: string]: string }>({});
   const [loading, setLoading] = React.useState(false);
@@ -81,7 +81,7 @@ export const RegisterForm = ({
         email: "",
         password: "",
         confirmPassword: "",
-        rol: "alumno",
+        rol: "administrador",
       });
       toast.success("¡Usuario registrado con éxito!");
       return setFormState("login");
@@ -166,8 +166,7 @@ export const RegisterForm = ({
                 <SelectValue placeholder="Seleccionar rol" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="admin">Administrador</SelectItem>
-                <SelectItem value="alumno">Alumno</SelectItem>
+                <SelectItem value="administrador">Administrador</SelectItem>
               </SelectContent>
             </Select>
             {errors.rol && (

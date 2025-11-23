@@ -15,12 +15,14 @@ import {
   Button,
 } from "@/src/components/ui";
 import { loginAction } from "@/src/actions";
+import { useAppStore } from "@/src/store";
 
 export const LoginForm = ({
   setFormState,
 }: {
   setFormState: React.Dispatch<React.SetStateAction<string>>;
 }) => {
+  const {setUser} = useAppStore();
   const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
@@ -44,7 +46,7 @@ export const LoginForm = ({
 
     try {
       const response = await loginAction(formData);
-      
+
       if ("error" in response) {
         return toast.warning("Ups! parece que ocurrio un error", {
           description: response?.error,
@@ -52,7 +54,7 @@ export const LoginForm = ({
       }
 
       if (response.user) {
-        localStorage.setItem("user", JSON.stringify(response.user));
+        setUser(response.user)
       }
       router.push("/dashboard");
       return toast.success("¡Usuario registrado con éxito!");
