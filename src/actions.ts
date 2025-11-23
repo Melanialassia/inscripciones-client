@@ -223,7 +223,7 @@ export async function crearInscripcion(body: {
 }) {
   try {
     const { data } = await axiosWithAuth(
-      "https://plataforma-inscripciones.vercel.app",
+      "https://plataforma-inscripciones.vercel.app/api/inscripciones",
       "post",
       body
     );
