@@ -27,8 +27,9 @@ export async function register(body: {
   rol: string;
 }) {
   try {
-    const { data } = await axios.post(
+    const { data } = await axiosWithAuth(
       "http://localhost:3000/api/auth/register",
+      "post",
       body
     );
 
@@ -45,8 +46,9 @@ export async function loginAction(formData: {
   password: string;
 }) {
   try {
-    const { data } = await axios.post(
+    const { data } = await axiosWithAuth(
       "https://plataforma-inscripciones.vercel.app/api/auth/login",
+      "post",
       formData
     );
 
@@ -82,8 +84,9 @@ export async function logoutServer() {
 
 export async function obtenerMaterias() {
   try {
-    const { data } = await axios.get(
-      `https://plataforma-inscripciones.vercel.app/api/materias`
+    const { data } = await axiosWithAuth(
+      "https://plataforma-inscripciones.vercel.app/api/materias",
+      "get"
     );
 
     return data;
@@ -96,8 +99,9 @@ export async function obtenerMaterias() {
 
 export async function obtenerProfesionales() {
   try {
-    const { data } = await axios.get(
-      `https://plataforma-inscripciones.vercel.app/api/profesionales`
+    const { data } = await axiosWithAuth(
+      "https://plataforma-inscripciones.vercel.app/api/profesionales",
+      "get"
     );
 
     return data;
@@ -162,7 +166,10 @@ export async function obtenerAlumnos() {
   try {
     const {
       data: { alumnos },
-    } = await axiosWithAuth("https://plataforma-inscripciones.vercel.app/api/alumno", "get");
+    } = await axiosWithAuth(
+      "https://plataforma-inscripciones.vercel.app/api/alumno",
+      "get"
+    );
 
     return alumnos;
   } catch (error: any) {
