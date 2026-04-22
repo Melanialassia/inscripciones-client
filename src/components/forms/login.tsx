@@ -42,6 +42,7 @@ export const LoginForm = ({
     try {
       const { data } = await axios.post("http://localhost:4000/api/auth/login", formData);
       setUser(data.user);
+      document.cookie = `token=${data.user.id}; path=/`;
       toast.success("Bienvenido!");
       router.push("/dashboard");
     } catch (err: any) {
