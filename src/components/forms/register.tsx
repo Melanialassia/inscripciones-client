@@ -18,7 +18,7 @@ import {
   CardTitle,
 } from "@/src/components/ui";
 import { validateRegisterForm } from "./validation";
-import { register } from "@/src/actions";
+import axios from "axios";
 
 export const RegisterForm = ({
   setFormState,
@@ -65,28 +65,18 @@ export const RegisterForm = ({
     const validationErrors = validateRegisterForm(formData);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+      setLoading(false);
       return;
     }
-
     try {
-      const response = await register(formData);
-
-      if ("error" in response) {
-        return toast.warning("Ups! parece que ocurrio un error", {
-          description: response?.error,
-        });
-      }
-      setFormData({
-        dni: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        rol: "administrador",
-      });
+      const { data } = await axios.post("http://localhost:4000/api/auth/register", formData);
+      setFormData({ dni: "", email: "", password: "", confirmPassword: "", rol: "administrador" });
       toast.success("¡Usuario registrado con éxito!");
       return setFormState("login");
     } catch (error: any) {
-      return toast.success("¡Ups! hubo un error", error.message);
+      toast.warning("Ups! parece que ocurrió un error", {
+        description: error.response?.data?.error || error.message,
+      });
     } finally {
       setLoading(false);
     }
