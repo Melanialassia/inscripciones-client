@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -14,7 +13,6 @@ import {
   Input,
   Button,
 } from "@/src/components/ui";
-import { loginAction } from "@/src/actions";
 import { useAppStore } from "@/src/store";
 
 export const LoginForm = ({
@@ -22,12 +20,9 @@ export const LoginForm = ({
 }: {
   setFormState: React.Dispatch<React.SetStateAction<string>>;
 }) => {
-  const {setUser} = useAppStore();
+  const { setUser } = useAppStore();
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -41,26 +36,17 @@ export const LoginForm = ({
     e.preventDefault();
     setLoading(true);
     if (!formData.email || !formData.password) {
+      setLoading(false);
       return setError("Todos los campos son obligatorios");
     }
-
     try {
-      const response = await loginAction(formData);
-
-      if ("error" in response) {
-        return toast.warning("Ups! parece que ocurrio un error", {
-          description: response?.error,
-        });
-      }
-
-      if (response.user) {
-        setUser(response.user)
-      }
+      const { data } = await axios.post("http://localhost:4000/api/auth/login", formData);
+      setUser(data.user);
+      toast.success("Bienvenido!");
       router.push("/dashboard");
-      return toast.success("¡Usuario registrado con éxito!");
     } catch (err: any) {
-      console.error(err);
       setError(err.response?.data?.error || "Error al iniciar sesión");
+      toast.warning("Error al iniciar sesión");
     } finally {
       setLoading(false);
     }
@@ -74,34 +60,18 @@ export const LoginForm = ({
             ¡Hola! Ingresa tu usuario y contraseña para iniciar sesión.
           </CardDescription>
         </CardHeader>
-
         <form onSubmit={handleSubmit}>
           <CardContent className="flex flex-col gap-5 items-center">
             <div className="flex flex-col gap-2 w-full">
               <Label>Email</Label>
-              <Input
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="tuemail@ejemplo.com"
-              />
+              <Input name="email" type="email" value={formData.email} onChange={handleChange} placeholder="tuemail@ejemplo.com" />
             </div>
-
             <div className="flex flex-col gap-2 w-full">
               <Label>Contraseña</Label>
-              <Input
-                name="password"
-                type="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="********"
-              />
+              <Input name="password" type="password" value={formData.password} onChange={handleChange} placeholder="********" />
             </div>
-
             {error && <p className="text-red-500 text-sm">{error}</p>}
           </CardContent>
-
           <CardFooter className="flex justify-center pt-5">
             <Button className="cursor-pointer" type="submit" disabled={loading}>
               {loading ? "Cargando..." : "Iniciar sesión"}
@@ -109,13 +79,8 @@ export const LoginForm = ({
           </CardFooter>
         </form>
       </Card>
-
       <div className="flex justify-center">
-        <Button
-          type="button"
-          variant="link"
-          onClick={() => setFormState("register")}
-        >
+        <Button type="button" variant="link" onClick={() => setFormState("register")}>
           Registrarme
         </Button>
       </div>

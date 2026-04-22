@@ -28,7 +28,7 @@ export async function register(body: {
 }) {
   try {
     const { data } = await axiosWithAuth(
-      "https://plataforma-inscripciones.vercel.app/api/auth/register",
+      "http://localhost:3000/api/auth/register",
       "post",
       body
     );
@@ -47,7 +47,7 @@ export async function loginAction(formData: {
 }) {
   try {
     const { data } = await axiosWithAuth(
-      "https://plataforma-inscripciones.vercel.app/api/auth/login",
+      "http://localhost:3000/api/auth/login",
       "post",
       formData
     );
@@ -65,12 +65,13 @@ export async function loginAction(formData: {
     return {
       user: {
         email: data.user.email,
-        dni: data.user.user_metadata?.dni,
+        dni: data.user.dni,
+        rol: data.user.rol,
       },
     };
   } catch (error: any) {
     return {
-      error: error.response?.data?.message || "Error al iniciar sesión",
+      error: error.response?.data?.error || "Error al iniciar sesión",
     };
   }
 }
@@ -85,7 +86,7 @@ export async function logoutServer() {
 export async function obtenerMaterias() {
   try {
     const { data } = await axiosWithAuth(
-      "https://plataforma-inscripciones.vercel.app/api/materias",
+      "http://localhost:3000/api/materias",
       "get"
     );
 
@@ -100,7 +101,7 @@ export async function obtenerMaterias() {
 export async function obtenerProfesionales() {
   try {
     const { data } = await axiosWithAuth(
-      "https://plataforma-inscripciones.vercel.app/api/profesionales",
+      "http://localhost:3000/api/profesionales",
       "get"
     );
 
@@ -118,7 +119,7 @@ export async function crearMateria(body: {
 }) {
   try {
     const { data } = await axiosWithAuth(
-      "https://plataforma-inscripciones.vercel.app/api/materias",
+      "http://localhost:3000/api/materias",
       "post",
       body
     );
@@ -137,7 +138,7 @@ export async function editarMateria({
 }) {
   try {
     const { data } = await axiosWithAuth(
-      `https://plataforma-inscripciones.vercel.app/api/materias/${id}`,
+      `http://localhost:3000/api/materias/${id}`,
       "put",
       body
     );
@@ -152,7 +153,7 @@ export async function editarMateria({
 export async function eliminarMateria(id: number) {
   try {
     const { data } = await axiosWithAuth(
-      `https://plataforma-inscripciones.vercel.app/api/materias/${id}`,
+      `http://localhost:3000/api/materias/${id}`,
       "delete"
     );
     return data;
@@ -167,7 +168,7 @@ export async function obtenerAlumnos() {
     const {
       data: { alumnos },
     } = await axiosWithAuth(
-      "https://plataforma-inscripciones.vercel.app/api/alumno",
+      "http://localhost:3000/api/alumno",
       "get"
     );
 
@@ -182,7 +183,7 @@ export async function obtenerAlumnos() {
 export async function editeEmail(body: { dni: string; email: string }) {
   try {
     const { data } = await axiosWithAuth(
-      `https://plataforma-inscripciones.vercel.app/api/alumno/${body.dni}`,
+      `http://localhost:3000/api/alumno/${body.dni}`,
       "put",
       body
     );
@@ -203,7 +204,7 @@ export async function obtenerInscripcionAlumno(dni: string) {
     const {
       data: { inscripciones },
     } = await axiosWithAuth(
-      `https://plataforma-inscripciones.vercel.app/api/inscripciones/alumno/${DNI}`,
+      `http://localhost:3000/api/inscripciones/alumno/${DNI}`,
       "get"
     );
 
@@ -223,7 +224,7 @@ export async function crearInscripcion(body: {
 }) {
   try {
     const { data } = await axiosWithAuth(
-      "https://plataforma-inscripciones.vercel.app/api/inscripciones",
+      "http://localhost:3000/api/inscripciones",
       "post",
       body
     );
@@ -241,7 +242,7 @@ export async function editartEstadoInscripcion(body: {
 }) {
   try {
     const { data } = await axiosWithAuth(
-      "https://plataforma-inscripciones.vercel.app/api/inscripciones/aprobar",
+      "http://localhost:3000/api/inscripciones/aprobar",
       "post",
       body
     );
@@ -255,7 +256,7 @@ export async function editartEstadoInscripcion(body: {
 export async function eliminarInscripcion(id_inscripcion: number) {
   try {
     const { data } = await axiosWithAuth(
-      `https://plataforma-inscripciones.vercel.app/api/inscripciones/${id_inscripcion}`,
+      `http://localhost:3000/api/inscripciones/${id_inscripcion}`,
       "delete"
     );
 
